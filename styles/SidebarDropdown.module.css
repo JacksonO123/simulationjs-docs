@@ -1,0 +1,33 @@
+.sidebarDropdown {
+	--animationTime: 0.5s;
+	position: relative;
+}
+
+.arrow {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-right: 8px;
+	transition: var(--animationTime);
+}
+
+.toggle {
+	display: flex;
+	flex-direction: row;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.rotated {
+	transform: rotate(90deg);
+}
+
+.contentWrapper {
+	overflow: hidden;
+	transition: var(--animationTime);
+}
+
+.content * {
+	padding-left: 60px;
+}

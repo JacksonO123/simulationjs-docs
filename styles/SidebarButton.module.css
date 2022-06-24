@@ -1,0 +1,22 @@
+.btn {
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	background: transparent;
+	border: none;
+	transition: 0.15s;
+	position: relative;
+}
+
+.btn:hover {
+	background: rgba(255, 255, 255, 0.125);
+}
+
+.btn:active {
+	background: rgba(255, 255, 255, 0.2);
+}
