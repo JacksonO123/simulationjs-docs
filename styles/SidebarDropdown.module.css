@@ -28,6 +28,10 @@
 	transition: var(--animationTime);
 }
 
-.content * {
-	padding-left: 60px;
+.content {
+	transition: var(--animationTime);
+}
+
+.content button {
+	padding-left: 50px;
 }

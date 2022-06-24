@@ -21,10 +21,10 @@ export default function Sidebar() {
 				</h2>
 			</SidebarItem>
 			<SidebarDropdown text="Graphics Objects">
-				<SidebarButton>Square</SidebarButton>
-				<SidebarButton>Circle</SidebarButton>
-				<SidebarButton>Polygon</SidebarButton>
-				<SidebarButton>Line</SidebarButton>
+				<SidebarButton to="/square">Square</SidebarButton>
+				<SidebarButton to="/circle">Circle</SidebarButton>
+				<SidebarButton to="/polygon">Polygon</SidebarButton>
+				<SidebarButton to="/line">Line</SidebarButton>
 			</SidebarDropdown>
 		</section>
 	);

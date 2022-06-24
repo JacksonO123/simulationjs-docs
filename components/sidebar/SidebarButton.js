@@ -1,7 +1,8 @@
 import styles from '../../styles/SidebarButton.module.css';
 import SidebarItem from './SidebarItem';
+import Link from '../Link';
 
-export default function SidebarButton({ children, onClick }) {
+export default function SidebarButton({ children, onClick, to = null }) {
 
 	const handleClick = e => {
 		e.stopPropagation();
@@ -10,8 +11,18 @@ export default function SidebarButton({ children, onClick }) {
 	}
 
 	return (
-		<button className={styles.btn} onClick={handleClick}>
-			<SidebarItem>{children}</SidebarItem>
-		</button>
+		to != null
+			? (
+				<Link to={to}>
+					<button className={styles.btn} onClick={handleClick}>
+						<SidebarItem>{children}</SidebarItem>
+					</button>
+				</Link>
+			)
+			: (
+				<button className={styles.btn} onClick={handleClick}>
+					<SidebarItem>{children}</SidebarItem>
+				</button>
+			)
 	)
 }
