@@ -1,11 +1,16 @@
 .item {
 	padding: 10px 15px;
-	color: rgb(200, 200, 200);
 	font-size: 18px;
 	font-weight: 300;
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
+}
+
+.item h2 {
+	color: white;
+	padding: 10px;
+	padding-bottom: 0;
 }
 
 .bordered {

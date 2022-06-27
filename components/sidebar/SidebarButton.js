@@ -2,7 +2,7 @@ import styles from '../../styles/SidebarButton.module.css';
 import SidebarItem from './SidebarItem';
 import Link from '../Link';
 
-export default function SidebarButton({ children, onClick, to = null }) {
+export default function SidebarButton({ children, onClick, to = null, active = false }) {
 
 	const handleClick = e => {
 		e.stopPropagation();
@@ -10,19 +10,21 @@ export default function SidebarButton({ children, onClick, to = null }) {
 			onClick(e);
 	}
 
+	const button = (
+		<button className={`${styles.btn} ${active === to && styles.active}`} onClick={handleClick}>
+			<SidebarItem>{children}</SidebarItem>
+		</button>
+	);
+
 	return (
 		to != null
 			? (
 				<Link to={to}>
-					<button className={styles.btn} onClick={handleClick}>
-						<SidebarItem>{children}</SidebarItem>
-					</button>
+					{button}
 				</Link>
 			)
 			: (
-				<button className={styles.btn} onClick={handleClick}>
-					<SidebarItem>{children}</SidebarItem>
-				</button>
+				button
 			)
 	)
 }
