@@ -5,6 +5,7 @@ import SidebarButton from './SidebarButton';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { v4 } from 'uuid';
+import { getTabs } from '../../tools/firebase';
 
 const SidebarContent = ({ content }) => {
 
@@ -44,46 +45,34 @@ const SidebarContent = ({ content }) => {
 }
 
 export default function Sidebar({ admin = false }) {
-	let paths = [
+	let startPaths = [
 		{
 			isPath: true,
 			show: 'Getting Started',
 			path: '/'
 		},
-		{
-			text: 'Graphics Objects',
-			paths: [
-				{
-					isPath: true,
-					show: 'Square',
-					path: '/square'
-				},
-				{
-					isPath: true,
-					show: 'Circle',
-					path: '/circle'
-				},
-				{
-					isPath: true,
-					show: 'Polygon',
-					path: '/polygon'
-				},
-				{
-					isPath: true,
-					show: 'Line',
-					path: '/line'
-				},
-			]
-		}
 	];
 
-	if (admin) {
-		paths.push({
-			isPath: true,
-			show: 'Add Info +',
-			path: '/addinfo'
-		})
-	}
+	const [paths, setPaths] = useState([...startPaths]);
+
+	useEffect(() => {
+		(async () => {
+			const tabs = await getTabs();
+			console.log(tabs);
+		})();
+	}, []);
+
+	useEffect(() => {
+		if (admin) {
+			setPaths([...startPaths,
+			{
+				isPath: true,
+				show: 'Add Info +',
+				path: '/admin/addinfo'
+			}
+			]);
+		}
+	}, [admin]);
 
 	const titleStyles = {
 		padding: 15,

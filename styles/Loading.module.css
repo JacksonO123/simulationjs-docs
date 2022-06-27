@@ -1,17 +1,17 @@
 .red{
-	stroke: #f44336;
+	stroke: var(--red);
 }
 .green{
-	stroke: #2ecc71;
+	stroke: var(--green);
 }
 .purple{
-	stroke: #ce93d8;
+	stroke: var(--purple);
 }
 .yellow{
-	stroke: #ffd700;
+	stroke: var(--yellow);
 }
 .blue {
-	stroke: #007bff;
+	stroke: var(--blue);
 }
 .svg{
 	transition: 0.5s;

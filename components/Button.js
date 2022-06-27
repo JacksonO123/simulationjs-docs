@@ -1,6 +1,8 @@
 import styles from '../styles/Button.module.css';
 
-export default function Button({ children, color, onClick }) {
+export default function Button({ children, color = 'blue', onClick, sx = {}, size = 'medium' }) {
+	const sizes = ['large', 'medium', 'small'];
+	size = sizes.includes(size) ? size : 'medium';
 
 	const handleClick = e => {
 		if (onClick) {
@@ -9,6 +11,6 @@ export default function Button({ children, color, onClick }) {
 	}
 
 	return (
-		<button className={`${styles.button} ${styles[color]}`} onClick={handleClick}>{children}</button>
+		<button style={sx} className={`${styles.button} ${styles[size]} ${styles[color]}`} onClick={handleClick}>{children}</button>
 	)
 }

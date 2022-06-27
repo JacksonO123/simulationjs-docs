@@ -2,7 +2,9 @@ import { initializeApp } from 'firebase/app';
 import {
 	getFirestore,
 	getDoc,
-	doc
+	doc,
+	getDocs,
+	collection
 } from 'firebase/firestore';
 import {
 	getAuth,
@@ -45,4 +47,17 @@ export const checkIsAdmin = async (user) => {
 	const admins = await getDoc(doc(db, 'admins', 'uids'));
 	const uids = admins.data().uids;
 	return uids.includes(user.uid);
+}
+
+export const getTabs = async () => {
+	const dbTabs = await getDocs(collection(db, 'tabs'));
+	let tabs = [];
+	dbTabs.forEach(tab => {
+		tabs.push(tab.data());
+	});
+	return tabs;
+}
+
+export const getUser = () => {
+	return auth.currentUser;
 }

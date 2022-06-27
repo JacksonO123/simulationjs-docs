@@ -10,4 +10,17 @@
 .full {
 	width: 100%;
 	height: 100%;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.fullForce {
+	height: 100vh;
+	width: 100vw;
+}
+
+.center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }

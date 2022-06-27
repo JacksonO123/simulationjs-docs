@@ -1,9 +1,17 @@
 .button{
 	border: none;
-	padding: 7px 18px;
 	border-radius: 4px;
-	font-size: 16px;
 	transition: 0.15s;
+}
+
+.large {
+	padding: 12px 36px;
+	font-size: 24px;
+}
+
+.medium {
+	padding: 7px 18px;
+	font-size: 16px;
 }
 
 .blue {
@@ -17,4 +25,17 @@
 
 .blue:active {
 	background: rgba(0, 123, 255, 0.25);
+}
+
+.gray {
+	background: rgba(0, 0, 0, 0.075);
+	color: rgba(0, 0, 0, 0.7);
+}
+
+.gray:hover {
+	background: rgba(0, 0, 0, 0.15);
+}
+
+.gray:focus {
+	background: rgba(0, 0, 0, 0.2);
 }

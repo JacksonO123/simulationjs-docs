@@ -11,6 +11,8 @@ export default function Home() {
   const [user, loading, error] = useAuthState(auth);
   const [admin, setAdmin] = useState(false);
 
+  // auth.signOut();
+
   useEffect(() => {
     (async () => {
       if (user) {
