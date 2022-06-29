@@ -35,7 +35,7 @@ const SidebarContent = ({ content }) => {
 				);
 			} else {
 				return (
-					<SidebarDropdown text={item.text} key={v4()} isOpen={checkDropdownPath(item.paths)}>
+					<SidebarDropdown text={item.show} key={v4()} isOpen={checkDropdownPath(item.paths)}>
 						<SidebarContent content={item.paths} />
 					</SidebarDropdown>
 				)
@@ -45,33 +45,41 @@ const SidebarContent = ({ content }) => {
 }
 
 export default function Sidebar({ admin = false }) {
-	let startPaths = [
+	const startPaths = [
 		{
 			isPath: true,
 			show: 'Getting Started',
 			path: '/'
 		},
 	];
-
 	const [paths, setPaths] = useState([...startPaths]);
+
+	const checkAddAdmin = () => {
+		if (admin) {
+			setPaths(prev => {
+				const obj = {
+					isPath: true,
+					show: 'Add Info +',
+					path: '/admin/addinfo'
+				}
+				if (!prev.includes(obj)) {
+					return [...prev, obj];
+				}
+				return prev;
+			});
+		}
+	}
 
 	useEffect(() => {
 		(async () => {
 			const tabs = await getTabs();
-			console.log(tabs);
+			await setPaths([...startPaths, ...tabs]);
+			checkAddAdmin();
 		})();
 	}, []);
 
 	useEffect(() => {
-		if (admin) {
-			setPaths([...startPaths,
-			{
-				isPath: true,
-				show: 'Add Info +',
-				path: '/admin/addinfo'
-			}
-			]);
-		}
+		checkAddAdmin();
 	}, [admin]);
 
 	const titleStyles = {
@@ -91,12 +99,6 @@ export default function Sidebar({ admin = false }) {
 			</SidebarItem>
 			<hr />
 			<SidebarContent content={paths} />
-			{/* <SidebarDropdown text="Graphics Objects">
-				<SidebarButton to="/square" active={pathname}>Square</SidebarButton>
-				<SidebarButton to="/circle" active={pathname}>Circle</SidebarButton>
-				<SidebarButton to="/polygon" active={pathname}>Polygon</SidebarButton>
-				<SidebarButton to="/line" active={pathname}>Line</SidebarButton>
-			</SidebarDropdown> */}
 		</section>
 	);
 }

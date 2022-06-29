@@ -10,6 +10,9 @@
 .docInputs {
 	display: flex;
 	flex-direction: column;
-	padding-left: 30px;
-	gap: 20px;
+	border-top: 2px solid var(--light);
+}
+
+.completed {
+	border-top: 2px solid var(--green) !important;
 }

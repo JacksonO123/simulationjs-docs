@@ -30,7 +30,7 @@ export default function Home() {
 
 	return (
 		<main className={styles.container}>
-			<Sidebar />
+			<Sidebar admin={admin} />
 			<div className={styles.full}>
 				<Header user={user} userLoading={loading} />
 			</div>

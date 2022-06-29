@@ -4,7 +4,8 @@ import {
 	getDoc,
 	doc,
 	getDocs,
-	collection
+	collection,
+	setDoc
 } from 'firebase/firestore';
 import {
 	getAuth,
@@ -53,11 +54,40 @@ export const getTabs = async () => {
 	const dbTabs = await getDocs(collection(db, 'tabs'));
 	let tabs = [];
 	dbTabs.forEach(tab => {
-		tabs.push(tab.data());
+		const obj = tab.data();
+		// obj.name = tab.id.replace(/\-/g, ' ');
+		tabs.push(obj);
 	});
 	return tabs;
 }
 
 export const getUser = () => {
 	return auth.currentUser;
+}
+
+const parseToPaths = (name, paths) => {
+	const newPaths = paths.map(path => {
+		const obj = {
+			isPath: true,
+			show: path.name,
+			path: path.path
+		}
+		return obj;
+	});
+	const obj = {
+		show: name,
+		paths: newPaths
+	}
+	return obj;
+}
+
+export const createGroup = async (name, docs) => {
+	const tabDocs = await getDocs(collection(db, 'tabs'));
+	let tabs = [];
+	tabDocs.forEach(tab => {
+		tabs.push(tab);
+	});
+	const newName = name.replace(/\s/g, '-');
+	const newPaths = parseToPaths(name, docs);
+	await setDoc(doc(db, 'tabs', newName), newPaths);
 }
