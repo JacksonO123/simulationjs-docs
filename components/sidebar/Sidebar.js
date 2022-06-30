@@ -5,9 +5,9 @@ import SidebarButton from './SidebarButton';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { v4 } from 'uuid';
-import { getTabs } from '../../tools/firebase';
+import { getTabs, deleteTabFromDropdown } from '../../tools/firebase';
 
-const SidebarContent = ({ content }) => {
+const SidebarContent = ({ content, admin, fetchTabs, parent }) => {
 
 	const [pathname, setPathname] = useState('');
 	const router = useRouter();
@@ -19,24 +19,43 @@ const SidebarContent = ({ content }) => {
 
 	const checkDropdownPath = (paths) => {
 		paths = paths.map(item => item?.path);
-		for (let i = 0; i < paths.length; i++) {
-			if (paths[i] == pathname) {
-				return true;
-			}
-		}
-		return false;
+		return paths.includes(pathname);
+	}
+
+	const handleRemoveTab = async tab => {
+		await deleteTabFromDropdown(parent.show, tab.path)
+		fetchTabs();
 	}
 
 	return (
 		content.map(item => {
 			if (item.isPath) {
 				return (
-					<SidebarButton key={v4()} to={item.path} active={pathname}>{item.show}</SidebarButton>
+					<SidebarButton
+						key={v4()}
+						to={item.path}
+						active={pathname}
+						removable={admin && !item.perminant}
+						handleDeleteDoc={() => handleRemoveTab(item)}
+					>
+						{item.show}
+					</SidebarButton>
 				);
 			} else {
 				return (
-					<SidebarDropdown text={item.show} key={v4()} isOpen={checkDropdownPath(item.paths)}>
-						<SidebarContent content={item.paths} />
+					<SidebarDropdown
+						text={item.show}
+						key={v4()}
+						isOpen={checkDropdownPath(item.paths)}
+						removable={admin && !item.perminant}
+						fetchTabs={fetchTabs}
+					>
+						<SidebarContent
+							content={item.paths}
+							admin={admin}
+							fetchTabs={fetchTabs}
+							parent={item}
+						/>
 					</SidebarDropdown>
 				)
 			}
@@ -48,6 +67,7 @@ export default function Sidebar({ admin = false }) {
 	const startPaths = [
 		{
 			isPath: true,
+			perminant: true,
 			show: 'Getting Started',
 			path: '/'
 		},
@@ -59,6 +79,7 @@ export default function Sidebar({ admin = false }) {
 			setPaths(prev => {
 				const obj = {
 					isPath: true,
+					perminant: true,
 					show: 'Add Info +',
 					path: '/admin/addinfo'
 				}
@@ -70,12 +91,14 @@ export default function Sidebar({ admin = false }) {
 		}
 	}
 
+	const fetchTabs = async () => {
+		const tabs = await getTabs();
+		await setPaths([...startPaths, ...tabs]);
+		checkAddAdmin();
+	}
+
 	useEffect(() => {
-		(async () => {
-			const tabs = await getTabs();
-			await setPaths([...startPaths, ...tabs]);
-			checkAddAdmin();
-		})();
+		fetchTabs();
 	}, []);
 
 	useEffect(() => {
@@ -98,7 +121,7 @@ export default function Sidebar({ admin = false }) {
 				</h2>
 			</SidebarItem>
 			<hr />
-			<SidebarContent content={paths} />
+			<SidebarContent content={paths} admin={admin} fetchTabs={fetchTabs} parent={null} />
 		</section>
 	);
 }

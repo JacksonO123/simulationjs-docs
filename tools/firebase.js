@@ -5,7 +5,8 @@ import {
 	doc,
 	getDocs,
 	collection,
-	setDoc
+	setDoc,
+	deleteDoc
 } from 'firebase/firestore';
 import {
 	getAuth,
@@ -70,7 +71,7 @@ const parseToPaths = (name, paths) => {
 		const obj = {
 			isPath: true,
 			show: path.name,
-			path: path.path
+			path: `/${path.path}`
 		}
 		return obj;
 	});
@@ -90,4 +91,18 @@ export const createGroup = async (name, docs) => {
 	const newName = name.replace(/\s/g, '-');
 	const newPaths = parseToPaths(name, docs);
 	await setDoc(doc(db, 'tabs', newName), newPaths);
+}
+
+export const deleteTabFromDropdown = async (dropdownName, path) => {
+	const name = dropdownName.replace(/\s/g, '-');
+	let group = await getDoc(doc(db, 'tabs', name));
+	group = group.data();
+	group.paths.splice(group.paths.find(el => el.path == path), 1);
+	console.log(group);
+	await setDoc(doc(db, 'tabs', name), group);
+}
+
+export const deleteDropdown = async (name) => {
+	name = name.replace(/\s/g, '-');
+	await deleteDoc(doc(db, 'tabs', name));
 }

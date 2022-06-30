@@ -5,6 +5,8 @@
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
+	width: 100%;
+	text-align: left;
 }
 
 .item h2 {

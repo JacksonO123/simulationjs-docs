@@ -14,9 +14,14 @@
 .toggle {
 	display: flex;
 	flex-direction: row;
-	display: flex;
-	justify-content: center;
+	justify-content: flex-start;
 	align-items: center;
+	text-align: left;
+}
+
+.span {
+	text-align: left;
+	word-break: normal;
 }
 
 .rotated {

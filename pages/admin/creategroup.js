@@ -10,12 +10,14 @@ import { useState } from 'react';
 import Button from '../../components/Button';
 import PathInput from '../../components/PathInput';
 import { v4 } from 'uuid';
+import { useRouter } from 'next/router';
 
 export default function Home() {
 	const auth = getAuthObject();
 	const [user, loading, error] = useAuthState(auth);
 	const [groupName, setGroupName] = useState('');
 	const [docs, setDocs] = useState([]);
+	const router = useRouter();
 
 	const handleAddNewDoc = () => {
 		setDocs(prev => {
@@ -46,13 +48,14 @@ export default function Home() {
 		})
 	}
 
-	const saveGroup = () => {
+	const saveGroup = async () => {
 		const newDocs = docs.map(item => {
 			const copy = Object.assign({}, item);
 			delete copy.mode;
 			return copy;
 		});
-		createGroup(groupName, newDocs);
+		await createGroup(groupName, newDocs);
+		router.push('/');
 	}
 
 	const checkCompleted = () => {

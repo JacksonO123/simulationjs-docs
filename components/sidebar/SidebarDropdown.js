@@ -2,8 +2,9 @@ import styles from '../../styles/SidebarDropdown.module.css';
 import SidebarButton from './SidebarButton';
 import AngleSvg from '../AngleSvg';
 import { useState, useRef, useEffect } from 'react';
+import { deleteDropdown } from '../../tools/firebase';
 
-export default function SidebarDropdown({ text, children, isOpen = false }) {
+export default function SidebarDropdown({ text, children, isOpen = false, removable = false, fetchTabs }) {
 	const [open, setOpen] = useState(isOpen);
 	const [dropdownHeight, setDropdownHeight] = useState(0);
 	const dropdownRef = useRef(null);
@@ -17,15 +18,24 @@ export default function SidebarDropdown({ text, children, isOpen = false }) {
 		setOpen(prev => !prev);
 	}
 
+	const handleDeleteDoc = async () => {
+		await deleteDropdown(text);
+		fetchTabs();
+	}
+
 	return (
 		<div className={styles.sidebarDropdown}>
-			<SidebarButton onClick={handleToggleDropdown}>
-				<div className={styles.toggle}>
-					<div className={`${styles.arrow} ${open && styles.rotated}`}>
-						<AngleSvg color="#ffffff" />
-					</div>
-					{text}
+			<SidebarButton
+				onClick={handleToggleDropdown}
+				removable={removable}
+				handleDeleteDoc={handleDeleteDoc}
+			>
+				<div className={`${styles.arrow} ${open && styles.rotated}`}>
+					<AngleSvg color="#ffffff" />
 				</div>
+				<span className={styles.span}>
+					{text}
+				</span>
 			</SidebarButton>
 			<div className={styles.contentWrapper} style={open ? { height: `${dropdownHeight}px` } : { height: '0px' }}>
 				<div className={styles.content} ref={dropdownRef}>

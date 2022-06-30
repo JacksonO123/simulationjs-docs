@@ -44,6 +44,7 @@
 	width: var(--length);
 	height: 2px;
 	background: var(--light);
+	z-index: 10;
 }
 
 .controls {
