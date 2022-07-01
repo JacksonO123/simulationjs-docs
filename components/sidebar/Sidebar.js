@@ -35,7 +35,7 @@ const SidebarContent = ({ content, admin, fetchTabs, parent }) => {
 						key={v4()}
 						to={item.path}
 						active={pathname}
-						removable={admin && !item.perminant}
+						admin={admin && !item.perminant}
 						handleDeleteDoc={() => handleRemoveTab(item)}
 					>
 						{item.show}
@@ -47,7 +47,7 @@ const SidebarContent = ({ content, admin, fetchTabs, parent }) => {
 						text={item.show}
 						key={v4()}
 						isOpen={checkDropdownPath(item.paths)}
-						removable={admin && !item.perminant}
+						admin={admin && !item.perminant}
 						fetchTabs={fetchTabs}
 					>
 						<SidebarContent

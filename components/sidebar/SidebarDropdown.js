@@ -1,10 +1,10 @@
 import styles from '../../styles/SidebarDropdown.module.css';
 import SidebarButton from './SidebarButton';
-import AngleSvg from '../AngleSvg';
+import AngleSvg from '../svgs/AngleSvg';
 import { useState, useRef, useEffect } from 'react';
 import { deleteDropdown } from '../../tools/firebase';
 
-export default function SidebarDropdown({ text, children, isOpen = false, removable = false, fetchTabs }) {
+export default function SidebarDropdown({ text, children, isOpen = false, admin = false, fetchTabs }) {
 	const [open, setOpen] = useState(isOpen);
 	const [dropdownHeight, setDropdownHeight] = useState(0);
 	const dropdownRef = useRef(null);
@@ -27,8 +27,9 @@ export default function SidebarDropdown({ text, children, isOpen = false, remova
 		<div className={styles.sidebarDropdown}>
 			<SidebarButton
 				onClick={handleToggleDropdown}
-				removable={removable}
+				admin={admin}
 				handleDeleteDoc={handleDeleteDoc}
+				isDropdown
 			>
 				<div className={`${styles.arrow} ${open && styles.rotated}`}>
 					<AngleSvg color="#ffffff" />

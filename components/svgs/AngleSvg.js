@@ -1,4 +1,4 @@
-import styles from '../styles/AngleSvg.module.css';
+import styles from '../../styles/AngleSvg.module.css';
 
 export default function AngleSvg({ color = '#000000' }) {
 	return (

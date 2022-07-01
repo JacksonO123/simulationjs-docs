@@ -1,10 +1,9 @@
-import styles from '../styles/XSvg.module.css';
+import styles from '../../styles/svgs.module.css';
 
-export default function XSvg({ color }) {
+export default function XSvg({ color = '#000000' }) {
 	return (
 		<svg
 			focusable="false"
-			aria-hidden="true"
 			viewBox="0 0 24 24"
 			className={styles.svg}
 		>
