@@ -5,11 +5,10 @@ import styles from '../styles/Home.module.css';
 import Header from '../components/header/Header';
 import { getAuthObject } from '../tools/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { checkIsAdmin } from '../tools/firebase';
+import { checkIsAdmin, getPage } from '../tools/firebase';
 
 export default function Home() {
-	const [pathname, setPathname] = useState('');
-	const router = useRouter();
+	const { query, pathname } = useRouter();
 	const auth = getAuthObject();
 	const [user, loading, error] = useAuthState(auth);
 	const [admin, setAdmin] = useState(false);
@@ -19,14 +18,17 @@ export default function Home() {
 			if (user) {
 				const isAdmin = await checkIsAdmin(user);
 				setAdmin(isAdmin);
-				console.log(isAdmin);
 			}
 		})();
 	}, [user]);
 
 	useEffect(() => {
-		setPathname(router.asPath.substring(1));
-	}, [router]);
+		(async () => {
+			if (pathname !== '[name]') {
+				const pg = await getPage(pathname);
+			}
+		})();
+	}, [pathname]);
 
 	return (
 		<main className={styles.container}>

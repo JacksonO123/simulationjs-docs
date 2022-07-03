@@ -4,9 +4,9 @@ import Sidebar from '../../components/sidebar/Sidebar';
 import Header from '../../components/header/Header';
 import styles from '../../styles/creategroup.module.css';
 import Input from '../../components/Input';
-import { getAuthObject, createGroup } from '../../tools/firebase';
+import { getAuthObject, createGroup, getGroup } from '../../tools/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from '../../components/Button';
 import PathInput from '../../components/PathInput';
 import { v4 } from 'uuid';
@@ -17,6 +17,7 @@ export default function Home() {
 	const [user, loading, error] = useAuthState(auth);
 	const [groupName, setGroupName] = useState('');
 	const [docs, setDocs] = useState([]);
+	const [query, setQuery] = useState(null);
 	const router = useRouter();
 
 	const handleAddNewDoc = () => {
@@ -28,7 +29,7 @@ export default function Home() {
 			}
 			return [...prev, obj];
 		});
-	}
+	};
 
 	const setDoc = (doc, index) => {
 		setDocs(prev => {
@@ -39,14 +40,14 @@ export default function Home() {
 			});
 			console.log(newDocs);
 			return newDocs;
-		})
-	}
+		});
+	};
 
 	const deleteDoc = index => {
 		setDocs(prev => {
 			return prev.filter((_, i) => index != i);
-		})
-	}
+		});
+	};
 
 	const saveGroup = async () => {
 		const newDocs = docs.map(item => {
@@ -54,9 +55,9 @@ export default function Home() {
 			delete copy.mode;
 			return copy;
 		});
-		await createGroup(groupName, newDocs);
+		await createGroup(groupName, newDocs, true);
 		router.push('/');
-	}
+	};
 
 	const checkCompleted = () => {
 		return docs.reduce((prev, current) => {
@@ -64,7 +65,42 @@ export default function Home() {
 			if (current.mode == 'imut') return true;
 			else return false;
 		}, true) && groupName != '';
-	}
+	};
+
+	useEffect(() => {
+		if (Object.keys(router.query).length > 0) {
+			setQuery({ ...router.query });
+		} else {
+			if (query !== null) {
+				setQuery(null);
+			}
+		}
+	}, [router]);
+
+	const parseDbPaths = paths => {
+		paths = paths.map(item => {
+			const copy = { ...item };
+			delete copy.isPath;
+			copy.name = copy.show;
+			delete copy.show;
+			copy.mode = 'imut';
+			copy.path = copy.path.substring(1);
+			return copy;
+		});
+		return paths;
+	};
+
+	useEffect(() => {
+		(async () => {
+			if (query) {
+				const name = query.name;
+				const dbPaths = await getGroup(name);
+				const newPaths = parseDbPaths(dbPaths.paths);
+				setDocs(newPaths);
+				setGroupName(name);
+			}
+		})();
+	}, [query]);
 
 	return (
 		<AdminSiteWrapper>
@@ -73,7 +109,12 @@ export default function Home() {
 				<div className={homeStyles.full}>
 					<Header user={user} userLoading={loading} />
 					<div className={styles.formWrapper}>
-						<Input placeholder="Group Name" onChange={e => setGroupName(e.target.value)} sx={{ width: 350 }} />
+						<Input
+							placeholder="Group Name"
+							onChange={e => setGroupName(e.target.value)}
+							value={groupName}
+							sx={{ width: 350 }}
+						/>
 						{docs.length > 0 && (
 							<div className={`${styles.docInputs} ${checkCompleted() ? styles.completed : ''}`}>
 								{docs.map((doc, index) => (
@@ -95,4 +136,4 @@ export default function Home() {
 			</div>
 		</AdminSiteWrapper>
 	);
-}
+};

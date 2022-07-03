@@ -5,6 +5,8 @@ import SmallButton from './SmallButton';
 import { useRouter } from 'next/router';
 import AddSvg from '../svgs/AddSvg';
 import EditSvg from '../svgs/EditSvg';
+import CheckMarkSvg from '../svgs/CheckMarkSvg';
+import { useState } from 'react';
 
 export default function SidebarButton({
 	children,
@@ -13,9 +15,14 @@ export default function SidebarButton({
 	active = false,
 	admin = false,
 	handleDeleteDoc,
-	isDropdown = false
+	isDropdown = false,
+	onAdd,
+	editable = null,
+	updateItem
 }) {
 	const router = useRouter();
+	const [editing, setEditing] = useState(false);
+	const [itemValue, setItemValue] = useState(editable);
 
 	const handleClick = e => {
 		if (onClick)
@@ -32,27 +39,59 @@ export default function SidebarButton({
 		if (router.asPath != to) {
 			router.push(to);
 		}
-	}
+	};
+
+	const handleOnAdd = e => {
+		if (onAdd)
+			onAdd(e);
+	};
+
+	const handleEditSave = () => {
+		updateItem(itemValue);
+		setEditing(false);
+	};
+
+	const handleUpdateItemValue = value => {
+		setItemValue(value);
+	};
+
+	const inputStyles = {
+		maxWidth: 170
+	};
 
 	const button = (
 		<button className={`${styles.btn} ${active === to && styles.active}`} onClick={handleClick}>
-			<SidebarItem>{children}</SidebarItem>
+			<SidebarItem
+				editValue={editable}
+				editing={editing}
+				onSave={handleUpdateItemValue}
+				inputStyles={inputStyles}
+			>
+				{children}
+			</SidebarItem>
 			{admin && (
-				<>
-					<SmallButton sx={buttonStyles} onClick={handleDeleteDoc}>
-						<XSvg color="#ffffff" />
-					</SmallButton>
-					<SmallButton sx={buttonStyles}>
-						<EditSvg color="#ffffff" />
-					</SmallButton>
-					{isDropdown && (
-						<SmallButton sx={buttonStyles}>
-							<AddSvg color="#ffffff" />
+				editing
+					? (
+						<SmallButton sx={buttonStyles} onClick={handleEditSave}>
+							<CheckMarkSvg color="#ffffff" />
 						</SmallButton>
-					)}
-				</>
+					) : (
+						<>
+							<SmallButton sx={buttonStyles} onClick={handleDeleteDoc}>
+								<XSvg color="#ffffff" />
+							</SmallButton>
+							<SmallButton sx={buttonStyles} onClick={() => setEditing(true)}>
+								<EditSvg color="#ffffff" />
+							</SmallButton>
+							{isDropdown && (
+								<SmallButton sx={buttonStyles} onClick={handleOnAdd}>
+									<AddSvg color="#ffffff" />
+								</SmallButton>
+							)}
+						</>
+					)
 			)}
-		</button>
+		</button >
 	);
 
 	return (

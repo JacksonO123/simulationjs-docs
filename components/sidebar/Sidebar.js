@@ -5,7 +5,7 @@ import SidebarButton from './SidebarButton';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { v4 } from 'uuid';
-import { getTabs, deleteTabFromDropdown } from '../../tools/firebase';
+import { getTabs, deleteTabFromDropdown, renameDoc } from '../../tools/firebase';
 
 const SidebarContent = ({ content, admin, fetchTabs, parent }) => {
 
@@ -20,12 +20,17 @@ const SidebarContent = ({ content, admin, fetchTabs, parent }) => {
 	const checkDropdownPath = (paths) => {
 		paths = paths.map(item => item?.path);
 		return paths.includes(pathname);
-	}
+	};
 
 	const handleRemoveTab = async tab => {
 		await deleteTabFromDropdown(parent.show, tab.path)
 		fetchTabs();
-	}
+	};
+
+	const handleUpdateItem = async (prevName, newName) => {
+		await renameDoc(prevName, newName, parent.show);
+		fetchTabs();
+	};
 
 	return (
 		content.map(item => {
@@ -37,6 +42,8 @@ const SidebarContent = ({ content, admin, fetchTabs, parent }) => {
 						active={pathname}
 						admin={admin && !item.perminant}
 						handleDeleteDoc={() => handleRemoveTab(item)}
+						updateItem={e => handleUpdateItem(item.show, e)}
+						editable={item.show}
 					>
 						{item.show}
 					</SidebarButton>
@@ -57,11 +64,11 @@ const SidebarContent = ({ content, admin, fetchTabs, parent }) => {
 							parent={item}
 						/>
 					</SidebarDropdown>
-				)
+				);
 			}
 		})
 	);
-}
+};
 
 export default function Sidebar({ admin = false }) {
 	const startPaths = [

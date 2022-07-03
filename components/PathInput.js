@@ -58,7 +58,7 @@ export default function PathInput({
 			<Input
 				placeholder="Doc Name"
 				value={name}
-				onChange={e => { setName(e.target.value); console.log('setting'); }}
+				onChange={e => setName(e.target.value)}
 				disabled={mode == 'imut'}
 			/>
 			<div className={styles.pathInput}>
@@ -70,6 +70,7 @@ export default function PathInput({
 					disabled={mode == 'imut'}
 				/>
 			</div>
+			<span>Warning:<br />The path cannot be changed after creating the group</span>
 			<div className={styles.controls}>
 				{mode == 'imut'
 					? (

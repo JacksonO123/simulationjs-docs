@@ -2,12 +2,14 @@ import styles from '../../styles/SidebarDropdown.module.css';
 import SidebarButton from './SidebarButton';
 import AngleSvg from '../svgs/AngleSvg';
 import { useState, useRef, useEffect } from 'react';
-import { deleteDropdown } from '../../tools/firebase';
+import { deleteGroup, renameGroup } from '../../tools/firebase';
+import { useRouter } from 'next/router';
 
 export default function SidebarDropdown({ text, children, isOpen = false, admin = false, fetchTabs }) {
 	const [open, setOpen] = useState(isOpen);
 	const [dropdownHeight, setDropdownHeight] = useState(0);
 	const dropdownRef = useRef(null);
+	const router = useRouter();
 
 	useEffect(() => {
 		const height = dropdownRef.current.getBoundingClientRect().height;
@@ -16,12 +18,21 @@ export default function SidebarDropdown({ text, children, isOpen = false, admin 
 
 	const handleToggleDropdown = () => {
 		setOpen(prev => !prev);
-	}
+	};
 
 	const handleDeleteDoc = async () => {
-		await deleteDropdown(text);
+		await deleteGroup(text);
 		fetchTabs();
-	}
+	};
+
+	const handleAddPath = () => {
+		router.push(`/admin/creategroup?name=${text}`);
+	};
+
+	const handleUpdateItem = async value => {
+		await renameGroup(text, value);
+		fetchTabs();
+	};
 
 	return (
 		<div className={styles.sidebarDropdown}>
@@ -30,6 +41,9 @@ export default function SidebarDropdown({ text, children, isOpen = false, admin 
 				admin={admin}
 				handleDeleteDoc={handleDeleteDoc}
 				isDropdown
+				onAdd={handleAddPath}
+				editable={text}
+				updateItem={handleUpdateItem}
 			>
 				<div className={`${styles.arrow} ${open && styles.rotated}`}>
 					<AngleSvg color="#ffffff" />

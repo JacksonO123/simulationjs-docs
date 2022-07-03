@@ -31,11 +31,11 @@ export default function Home() {
 							desc="Creates a dropdown for grouping similar elements"
 							action={handleCreateNewDocGroup}
 						/>
-						<ActionBox
+						{/* <ActionBox
 							title="Create Object Doc"
 							desc="Creates a new documentation tab for an object"
 							action={handleCreateObjectDoc}
-						/>
+						/> */}
 					</div>
 				</div>
 			</div>
