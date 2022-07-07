@@ -3,6 +3,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useState, useEffect } from 'react';
 import homeStyles from '../../styles/Home.module.css';
 import Loading from '../Loading';
+import ErrorScreen from '../ErrorScreen';
 
 export default function AdminSiteWrapper({ children }) {
 	const auth = getAuthObject();

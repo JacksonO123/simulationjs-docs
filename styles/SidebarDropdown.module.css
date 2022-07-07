@@ -21,7 +21,7 @@
 
 .span {
 	text-align: left;
-	word-break: normal;
+	word-break: break-all;
 }
 
 .rotated {

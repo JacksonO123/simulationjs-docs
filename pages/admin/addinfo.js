@@ -25,7 +25,7 @@ export default function Home() {
 				<Sidebar admin />
 				<div className={homeStyles.full}>
 					<Header user={user} userLoading={false} />
-					<div className={styles.actionBoxes}>
+					<div className={`${styles.actionBoxes} ${homeStyles.content}`}>
 						<ActionBox
 							title="Create New Doc Group"
 							desc="Creates a dropdown for grouping similar elements"

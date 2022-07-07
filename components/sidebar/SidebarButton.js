@@ -56,11 +56,19 @@ export default function SidebarButton({
 	};
 
 	const inputStyles = {
-		maxWidth: 170
+		maxWidth: 170,
+		borderColor: 'rgba(255, 255, 255, 0.75)'
+	};
+
+	const checkActive = () => {
+		if (Array.isArray(active)) {
+			return active.includes(to);
+		}
+		return active === to;
 	};
 
 	const button = (
-		<button className={`${styles.btn} ${active === to && styles.active}`} onClick={handleClick}>
+		<button className={`${styles.btn} ${checkActive() && styles.active}`} onClick={handleClick}>
 			<SidebarItem
 				editValue={editable}
 				editing={editing}

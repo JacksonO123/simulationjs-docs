@@ -7,8 +7,7 @@ import { useRouter } from 'next/router';
 import { v4 } from 'uuid';
 import { getTabs, deleteTabFromDropdown, renameDoc } from '../../tools/firebase';
 
-const SidebarContent = ({ content, admin, fetchTabs, parent }) => {
-
+const SidebarContent = ({ content, admin, fetchTabs, parent, forceActive = null }) => {
 	const [pathname, setPathname] = useState('');
 	const router = useRouter();
 
@@ -39,7 +38,7 @@ const SidebarContent = ({ content, admin, fetchTabs, parent }) => {
 					<SidebarButton
 						key={v4()}
 						to={item.path}
-						active={pathname}
+						active={forceActive !== null ? [pathname, forceActive] : pathname}
 						admin={admin && !item.perminant}
 						handleDeleteDoc={() => handleRemoveTab(item)}
 						updateItem={e => handleUpdateItem(item.show, e)}
@@ -70,7 +69,7 @@ const SidebarContent = ({ content, admin, fetchTabs, parent }) => {
 	);
 };
 
-export default function Sidebar({ admin = false }) {
+export default function Sidebar({ admin = false, forceActive = null }) {
 	const startPaths = [
 		{
 			isPath: true,
@@ -96,13 +95,13 @@ export default function Sidebar({ admin = false }) {
 				return prev;
 			});
 		}
-	}
+	};
 
 	const fetchTabs = async () => {
 		const tabs = await getTabs();
-		await setPaths([...startPaths, ...tabs]);
+		setPaths([...startPaths, ...tabs]);
 		checkAddAdmin();
-	}
+	};
 
 	useEffect(() => {
 		fetchTabs();
@@ -128,7 +127,13 @@ export default function Sidebar({ admin = false }) {
 				</h2>
 			</SidebarItem>
 			<hr />
-			<SidebarContent content={paths} admin={admin} fetchTabs={fetchTabs} parent={null} />
+			<SidebarContent
+				content={paths}
+				admin={admin}
+				fetchTabs={fetchTabs}
+				parent={null}
+				forceActive={forceActive}
+			/>
 		</section>
 	);
-}
+};

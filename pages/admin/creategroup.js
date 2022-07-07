@@ -8,7 +8,7 @@ import { getAuthObject, createGroup, getGroup } from '../../tools/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useState, useEffect } from 'react';
 import Button from '../../components/Button';
-import PathInput from '../../components/PathInput';
+import PathInput from '../../components/admin/PathInput';
 import { v4 } from 'uuid';
 import { useRouter } from 'next/router';
 

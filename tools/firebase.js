@@ -79,15 +79,18 @@ const filterPaths = paths => {
 	return newPaths;
 };
 
-const parseToDocString = val => {
-	return val.replace(/\s/g, '-');
-}
+export const improveName = name => {
+	return name.replace(/\-/g, ' ').split(' ').map(item => {
+		item = item[0].toUpperCase() + item.substring(1);
+		return item;
+	}).join(' ');
+};
 
 const parseToPaths = (name, paths) => {
 	let newPaths = paths.map(path => {
 		const obj = {
 			isPath: true,
-			show: path.name,
+			show: improveName(path.name),
 			path: `/${path.path}`
 		}
 		return obj;
@@ -106,13 +109,12 @@ export const createGroup = async (name, docs, fromInputs = false) => {
 	tabDocs.forEach(tab => {
 		tabs.push(tab);
 	});
-	const newName = parseToDocString(name);
 	const newPaths = fromInputs ? parseToPaths(name, docs) : docs;
-	await setDoc(doc(db, 'tabs', newName), newPaths);
+	await setDoc(doc(db, 'tabs', name), newPaths);
 };
 
 export const getGroup = async name => {
-	const groupDoc = await getDoc(doc(db, 'tabs', parseToDocString(name)));
+	const groupDoc = await getDoc(doc(db, 'tabs', name));
 	if (groupDoc.exists()) {
 		const data = groupDoc.data();
 		return data;
@@ -120,15 +122,13 @@ export const getGroup = async name => {
 };
 
 export const deleteTabFromDropdown = async (dropdownName, path) => {
-	const name = dropdownName.replace(/\s/g, '-');
-	let group = await getDoc(doc(db, 'tabs', name));
+	let group = await getDoc(doc(db, 'tabs', dropdownName));
 	group = group.data();
 	group.paths.splice(group.paths.find(el => el.path == path), 1);
-	await setDoc(doc(db, 'tabs', name), group);
+	await setDoc(doc(db, 'tabs', dropdownName), group);
 };
 
 export const deleteGroup = async name => {
-	name = parseToDocString(name);
 	await deleteDoc(doc(db, 'tabs', name));
 };
 
@@ -152,10 +152,29 @@ export const renameDoc = async (prevName, newName, parentName) => {
 	const groupDoc = await getGroup(parentName);
 	groupDoc.paths = groupDoc.paths.map(path => {
 		if (path.show === prevName) {
-			path.show = newName;
+			path.show = improveName(newName);
 			return path;
 		}
 		return path;
 	});
-	await setDoc(doc(db, 'tabs', parseToDocString(parentName)), groupDoc);
+	await setDoc(doc(db, 'tabs', parentName), groupDoc);
+};
+
+export const getTabInfoFromPath = async path => {
+	const tabs = await getTabs();
+	for (let i = 0; i < tabs.length; i++) {
+		for (let j = 0; j < tabs[i].paths.length; j++) {
+			const p = tabs[i].paths[j];
+			if (p.path === `/${path}`) return p.show;
+		}
+	}
+	return null;
+};
+
+export const savePage = async (name, attributes) => {
+	const newPage = {
+		name,
+		attributes
+	};
+	await setDoc(doc(db, 'pages', name), { attributes: newPage });
 };

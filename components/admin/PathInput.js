@@ -1,7 +1,6 @@
-import Input from "./Input";
-import styles from '../styles/DocInput.module.css';
-import TextArea from "./TextArea";
-import Button from "./Button";
+import Input from "../Input";
+import styles from '../../styles/DocInput.module.css';
+import Button from "../Button";
 import { useState } from 'react';
 
 export default function PathInput({
