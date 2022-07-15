@@ -137,7 +137,7 @@ export const getPage = async dir => {
 		dir = dir.substring(1);
 	const page = await getDoc(doc(db, 'pages', dir));
 	if (!page.exists()) return null;
-	return page;
+	return page.data();
 };
 
 export const renameGroup = async (prevName, newName) => {
@@ -171,10 +171,6 @@ export const getTabInfoFromPath = async path => {
 	return null;
 };
 
-export const savePage = async (name, attributes) => {
-	const newPage = {
-		name,
-		attributes
-	};
-	await setDoc(doc(db, 'pages', name), { attributes: newPage });
+export const savePage = async (name, attributes, pathname) => {
+	await setDoc(doc(db, 'pages', pathname), { attributes, name });
 };

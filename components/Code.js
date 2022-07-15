@@ -5,7 +5,8 @@ export default function Code({ children }) {
 
 	const styles = {
 		borderRadius: 6,
-		minWidth: 250
+		minWidth: 250,
+		margin: 0
 	};
 
 	return (

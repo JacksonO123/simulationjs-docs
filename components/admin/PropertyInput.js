@@ -33,6 +33,13 @@ export default function PropertyInput({
 		cancelAdding();
 	};
 
+	const checkCanAdd = () => {
+		return (
+			title !== '' &&
+			desc !== ''
+		);
+	};
+
 	return (
 		<div className={styles.wrapper}>
 			<Input
@@ -58,7 +65,7 @@ export default function PropertyInput({
 				<Button onClick={() => setAddingCode(true)}>Add Code</Button>
 			)}
 			<div className={styles.controls}>
-				<Button onClick={handleAdd}>Add</Button>
+				{checkCanAdd() && <Button onClick={handleAdd}>Add</Button>}
 				<Button onClick={handleCancel} color="gray">Cancel</Button>
 			</div>
 		</div>

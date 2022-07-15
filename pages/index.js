@@ -11,14 +11,11 @@ export default function Home() {
   const [user, loading, error] = useAuthState(auth);
   const [admin, setAdmin] = useState(false);
 
-  // auth.signOut();
-
   useEffect(() => {
     (async () => {
       if (user) {
         const isAdmin = await checkIsAdmin(user);
         setAdmin(isAdmin);
-        console.log(isAdmin);
       }
     })();
   }, [user]);
@@ -27,7 +24,7 @@ export default function Home() {
     <div className={styles.container}>
       <Sidebar admin={admin} />
       <main className={styles.full}>
-        <Header user={user} userLoading={loading} />
+        <Header user={user} userLoading={loading} admin={admin} />
       </main>
     </div>
   );

@@ -1,9 +1,8 @@
 .pictureWrapper {
-	--size: 32.5px;
-	height: var(--size);
-	width: var(--size);
 	cursor: pointer;
 	animation: fadeIn 0.2s ease-in-out;
+	display: flex;
+	align-items: center;
 }
 
 .pictureWrapper img {

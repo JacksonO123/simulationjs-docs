@@ -1,4 +1,4 @@
-import { getAuthObject, checkIsAdmin, getTabInfoFromPath, improveName, savePage } from "../../tools/firebase";
+import { getAuthObject, checkIsAdmin, getTabInfoFromPath, improveName, savePage, getPage } from "../../tools/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useState, useEffect } from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
@@ -30,15 +30,20 @@ export default function Home() {
 
 	useEffect(() => {
 		(async () => {
-			let qName = router.query.name;
-			qName = await getTabInfoFromPath(qName);
-			if (qName) {
-				setValidPage(true);
-				const newName = improveName(qName);
-				console.log(newName);
-				setName(newName);
-			} else {
-				setValidPage(false);
+			if (Object.keys(router.query).length !== 0) {
+				let qName = router.query.name;
+				const pg = await getPage(qName);
+				if (pg !== null) {
+					setProperties(pg.attributes);
+				}
+				qName = await getTabInfoFromPath(qName);
+				if (qName) {
+					setValidPage(true);
+					const newName = improveName(qName);
+					setName(newName);
+				} else {
+					setValidPage(false);
+				}
 			}
 		})();
 	}, [router]);
@@ -57,8 +62,9 @@ export default function Home() {
 	};
 
 	const handleSavePage = async () => {
-		savePage(router.query.name, properties);
-		router.push('/');
+		const pathname = router.query.name;
+		savePage(name, properties, pathname);
+		router.push(`/${pathname}`);
 	};
 
 	const handleDeleteProp = index => {
@@ -76,7 +82,7 @@ export default function Home() {
 				<Header user={user} userLoading={loading} />
 				<div className={styles.content}>
 					{validPage === null
-						? <h1>Loading...</h1>
+						? <h1 className={styles.pageTitle}>Loading...</h1>
 						: validPage
 							? (
 								<>

@@ -14,6 +14,19 @@
 	overflow-x: hidden;
 }
 
+.pageTitle {
+	font-weight: 300 !important;
+	font-size: 35px;
+}
+
+.adminPageControls {
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+	padding: 18px;
+	border-bottom: 1px solid #ccc;
+}
+
 .fullForce {
 	height: 100vh;
 	width: 100vw;

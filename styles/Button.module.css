@@ -32,6 +32,19 @@
 	background: rgba(0, 123, 255, 0.25);
 }
 
+.purple {
+  background: rgba(85, 105, 255, 0.125);
+	color: rgb(85, 105, 255);
+}
+
+.purple:hover {
+  background: rgba(85, 105, 255, 0.175);
+}
+
+.purple:active {
+  background: rgba(85, 105, 255, 0.25);
+}
+
 .gray {
 	background: rgba(0, 0, 0, 0.075);
 	color: rgba(0, 0, 0, 0.7);

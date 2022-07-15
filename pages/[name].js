@@ -7,6 +7,9 @@ import { getAuthObject } from '../tools/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { checkIsAdmin, getPage } from '../tools/firebase';
 import ActionBox from '../components/admin/ActionBox';
+import DocProperties from '../components/DocProperties';
+import Button from '../components/Button';
+import EditSvg from '../components/svgs/EditSvg';
 
 export default function Home() {
 	const router = useRouter();
@@ -30,11 +33,12 @@ export default function Home() {
 				const pg = await getPage(router.asPath);
 				if (!pg) setPage(false);
 				else setPage(pg);
+				console.log(pg);
 			}
 		})();
 	}, [router.asPath]);
 
-	const handleCreatePage = () => {
+	const handleEditPage = () => {
 		router.push(`/admin/createpage?name=${router.asPath.substring(1)}`);
 	};
 
@@ -42,19 +46,27 @@ export default function Home() {
 		<main className={styles.container}>
 			<Sidebar admin={admin} />
 			<div className={styles.full}>
-				<Header user={user} userLoading={loading} />
+				<Header user={user} userLoading={loading} admin={admin} />
+				{(admin && page !== null && page !== false) && (
+					<div className={styles.adminPageControls}>
+						<Button onClick={handleEditPage} color="gray">Edit</Button>
+					</div>
+				)}
 				<div className={styles.content}>
 					{admin && (
 						page === null
 							? <h1>Loading...</h1>
 							: page !== false
 								? (
-									<></>
+									<>
+										<h1 className={styles.pageTitle}>{page.name}</h1>
+										<DocProperties props={page.attributes} />
+									</>
 								) : (
 									<ActionBox
 										title="Page data not found"
 										desc="Page data does not exist, press create to make the page"
-										action={handleCreatePage}
+										action={handleEditPage}
 									/>
 								)
 					)}
