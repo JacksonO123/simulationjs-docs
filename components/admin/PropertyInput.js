@@ -23,7 +23,6 @@ export default function PropertyInput({
 			title,
 			desc,
 			code,
-
 		};
 		addProperty(obj);
 		cancelAdding();

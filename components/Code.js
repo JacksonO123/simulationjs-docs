@@ -1,17 +1,20 @@
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { materialOceanic } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import styles from '../styles/Code.module.css';
 
 export default function Code({ children }) {
 
-	const styles = {
+	const customStyles = {
 		borderRadius: 6,
 		minWidth: 250,
-		margin: 0
+		margin: 0,
 	};
 
 	return (
-		<SyntaxHighlighter language="javascript" style={materialOceanic} customStyle={styles}>
-			{children}
-		</SyntaxHighlighter>
+		<div className={styles.code}>
+			<SyntaxHighlighter language="javascript" style={materialOceanic} customStyle={customStyles}>
+				{children}
+			</SyntaxHighlighter>
+		</div>
 	);
 }

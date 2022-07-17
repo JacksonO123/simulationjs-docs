@@ -2,6 +2,7 @@ import Input from "../Input";
 import styles from '../../styles/DocInput.module.css';
 import Button from "../Button";
 import { useState } from 'react';
+import Warning from '../Warning';
 
 export default function PathInput({
 	saveDoc,
@@ -69,7 +70,7 @@ export default function PathInput({
 					disabled={mode == 'imut'}
 				/>
 			</div>
-			<span>Warning:<br />The path cannot be changed after creating the group</span>
+			{mode === 'mut' && <Warning>The path cannot be changed after creating the group</Warning>}
 			<div className={styles.controls}>
 				{mode == 'imut'
 					? (

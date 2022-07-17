@@ -58,5 +58,5 @@ export default function SidebarDropdown({ text, children, isOpen = false, admin 
 				</div>
 			</div>
 		</div>
-	)
+	);
 }

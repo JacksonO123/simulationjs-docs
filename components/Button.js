@@ -1,6 +1,6 @@
 import styles from '../styles/Button.module.css';
 
-export default function Button({ children, color = 'blue', onClick, sx = {}, size = 'medium' }) {
+export default function Button({ children, color = 'blue', onClick, sx = {}, size = 'medium', disabled = false }) {
 	const sizes = ['large', 'medium', 'small'];
 	size = sizes.includes(size) ? size : 'medium';
 
@@ -11,6 +11,13 @@ export default function Button({ children, color = 'blue', onClick, sx = {}, siz
 	}
 
 	return (
-		<button style={sx} className={`${styles.button} ${styles[size]} ${styles[color]}`} onClick={handleClick}>{children}</button>
-	)
+		<button
+			style={sx}
+			className={`${styles.button} ${styles[size]} ${!disabled && styles[color]}`}
+			onClick={handleClick}
+			disabled={disabled}
+		>
+			{children}
+		</button>
+	);
 }

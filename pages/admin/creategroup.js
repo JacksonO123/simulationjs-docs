@@ -38,7 +38,6 @@ export default function Home() {
 					return Object.assign({}, doc);
 				} else return d;
 			});
-			console.log(newDocs);
 			return newDocs;
 		});
 	};
@@ -130,7 +129,7 @@ export default function Home() {
 							</div>
 						)}
 						<Button onClick={handleAddNewDoc}>Add New Doc +</Button>
-						<Button onClick={saveGroup}>Submit</Button>
+						<Button onClick={saveGroup} disabled={!checkCompleted()}>Submit</Button>
 					</div>
 				</div>
 			</div>
